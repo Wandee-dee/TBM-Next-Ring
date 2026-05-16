@@ -23,6 +23,12 @@ h1{font-size:16px;font-weight:600;margin-bottom:16px}
 .tog button.on{background:#f0f0f0;color:#111;font-weight:500}
 .chip{display:inline-block;padding:2px 9px;border-radius:4px;font-size:12px;font-weight:500;margin-top:5px}
 
+/* tabs */
+.tabs{display:flex;gap:0;border-bottom:2px solid #e0e0e0;margin-bottom:14px}
+.tab{padding:8px 18px;font-size:13px;font-weight:500;background:none;border:none;cursor:pointer;color:#888;border-bottom:2px solid transparent;margin-bottom:-2px}
+.tab.on{color:#185FA5;border-bottom-color:#185FA5}
+
+/* scenario */
 .sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .sc-btn{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #ddd;background:#fafafa;cursor:pointer;text-align:left;width:100%;transition:all .15s}
 .sc-btn:hover{border-color:#999}
@@ -31,7 +37,6 @@ h1{font-size:16px;font-weight:600;margin-bottom:16px}
 .sc-label{font-size:12px;font-weight:500;color:#111;line-height:1.3}
 .sc-desc{font-size:10px;color:#888;margin-top:1px}
 .sc-full{grid-column:span 2}
-
 .ratio-panel{display:none;margin-top:10px;padding:12px;background:#f7f9ff;border:1px solid #cce;border-radius:8px}
 .ratio-panel.show{display:block}
 .ratio-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -42,11 +47,10 @@ h1{font-size:16px;font-weight:600;margin-bottom:16px}
 .rp-chip{display:inline-flex;align-items:center;justify-content:center;width:30px;height:22px;border-radius:4px;font-size:11px;font-weight:600}
 .rp-L{background:#ddeeff;color:#185FA5}
 .rp-R{background:#ffeeee;color:#993C1D}
-
-/* auto logic note */
 .logic-box{margin-top:10px;padding:10px 12px;background:#fffbea;border:1px solid #e8d87a;border-radius:8px;font-size:11px;color:#555;line-height:1.7}
 .logic-box b{color:#111}
 
+/* candidates */
 .cand-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 .cand-btn{display:flex;align-items:center;gap:8px;padding:7px 11px;border-radius:8px;border:1px solid #ddd;background:#fafafa;cursor:pointer;transition:all .15s}
 .cand-btn:hover{border-color:#999}
@@ -59,6 +63,7 @@ h1{font-size:16px;font-weight:600;margin-bottom:16px}
 .cand-vals{font-size:11px;color:#666;line-height:1.5}
 .star{font-size:10px;color:#0F6E56;margin-left:1px}
 
+/* table */
 table{width:100%;border-collapse:collapse;font-size:12px}
 th{font-size:10px;font-weight:600;color:#888;text-align:center;padding:6px 5px;border-bottom:1px solid #eee;white-space:nowrap}
 th.l{text-align:left}
@@ -66,6 +71,7 @@ td{padding:6px 5px;text-align:center;border-bottom:1px solid #f0f0f0;font-varian
 td.l{text-align:left;font-weight:500}
 tr:last-child td{border-bottom:none}
 tr.hi td{background:#f7f7f7}
+tr.best-ring td{background:#eaf5ee}
 .kb{display:inline-flex;align-items:center;justify-content:center;min-width:34px;padding:2px 6px;border-radius:4px;font-weight:700;font-size:12px}
 .kbL{background:#ddeeff;color:#185FA5}
 .kbR{background:#ffeeee;color:#993C1D}
@@ -76,6 +82,7 @@ tr.hi td{background:#f7f7f7}
 .vtag-warn{background:#fff0cc;color:#8B6914}
 .vtag-danger{background:#ffe0e0;color:#A32D2D}
 .vtag-same{background:#f0f0f0;color:#888}
+.vtag-best{background:#eaf5ee;color:#0F6E56}
 
 .rtog{display:inline-flex;border:1px solid #ddd;border-radius:5px;overflow:hidden}
 .rtog button{padding:3px 7px;font-size:11px;background:#fff;color:#666;border:none;cursor:pointer;border-right:1px solid #ddd}
@@ -85,12 +92,26 @@ tr.hi td{background:#f7f7f7}
 .rtog button.on-L{background:#ddeeff;color:#185FA5;font-weight:700}
 .rtog button.on-R{background:#ffeeee;color:#993C1D;font-weight:700}
 
-.chart-wrap{margin-top:12px;height:110px}
+.chart-wrap{margin-top:12px;height:120px}
+
+/* convergence */
+.conv-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.conv-metric{background:#f7f7f7;border-radius:8px;padding:10px 12px;text-align:center}
+.conv-metric .lb{font-size:10px;color:#888;margin-bottom:3px}
+.conv-metric .vl{font-size:22px;font-weight:600;color:#111}
+.conv-metric .vl.good{color:#0F6E56}
+.conv-metric .vl.mid{color:#8B6914}
+.conv-key-seq{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.conv-ring{display:flex;flex-direction:column;align-items:center;gap:2px}
+.conv-ring .rn{font-size:9px;color:#aaa}
+.conv-ring .rk{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:24px;border-radius:4px;font-size:11px;font-weight:700}
+.conv-ring.is-best .rk{outline:2px solid #0F6E56}
 </style>
 </head>
 <body>
 <h1>TBM Next Ring Key Calculator</h1>
 
+<!-- INPUT always visible -->
 <div class="card">
   <p class="stitle">Current ring</p>
   <div class="g3">
@@ -130,107 +151,139 @@ tr.hi td{background:#f7f7f7}
   <div id="vChip"></div>
 </div>
 
-<div class="card">
-  <p class="stitle">Forecast scenario</p>
-  <div class="sc-grid">
-    <button class="sc-btn on" data-sc="auto" onclick="setSc(this)">
-      <span class="sc-icon">⭐</span>
-      <span><span class="sc-label">Best auto</span><br><span class="sc-desc">สลับ L-R + ±30 / ±55 limit</span></span>
-    </button>
-    <button class="sc-btn" data-sc="prefL" onclick="setSc(this)">
-      <span class="sc-icon">🔵</span>
-      <span><span class="sc-label">เน้น L keys</span><br><span class="sc-desc">เลือก L ก่อนเสมอ</span></span>
-    </button>
-    <button class="sc-btn" data-sc="prefR" onclick="setSc(this)">
-      <span class="sc-icon">🔴</span>
-      <span><span class="sc-label">เน้น R keys</span><br><span class="sc-desc">เลือก R ก่อนเสมอ</span></span>
-    </button>
-    <button class="sc-btn" data-sc="altLR" onclick="setSc(this)">
-      <span class="sc-icon">🔄</span>
-      <span><span class="sc-label">สลับ L-R ทุก ring</span><br><span class="sc-desc">L→R→L→R (ไม่มี limit)</span></span>
-    </button>
-    <button class="sc-btn" data-sc="minH" onclick="setSc(this)">
-      <span class="sc-icon">↔️</span>
-      <span><span class="sc-label">เน้น H lead</span><br><span class="sc-desc">ลด H ก่อน ไม่สน V</span></span>
-    </button>
-    <button class="sc-btn" data-sc="minV" onclick="setSc(this)">
-      <span class="sc-icon">↕️</span>
-      <span><span class="sc-label">เน้น V plumb</span><br><span class="sc-desc">ลด V ก่อน ไม่สน H</span></span>
-    </button>
-    <button class="sc-btn sc-full" data-sc="ratio" onclick="setSc(this)">
-      <span class="sc-icon">⚖️</span>
-      <span><span class="sc-label">Custom L:R ratio</span><br><span class="sc-desc">กำหนดเองว่าจะใช้ L กี่ ring แล้วสลับ R กี่ ring</span></span>
-    </button>
-  </div>
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab on" onclick="switchTab('forecast',this)">10-Ring Forecast</button>
+  <button class="tab" onclick="switchTab('convergence',this)">Convergence Finder</button>
+</div>
 
-  <div class="ratio-panel" id="ratioPanel">
-    <div class="ratio-row">
-      <div class="ratio-block">
-        <label style="color:#185FA5">L</label>
-        <input type="number" id="ratioL" value="2" min="1" max="20" oninput="update()">
-        <label>rings →</label>
-      </div>
-      <div class="ratio-block">
-        <label style="color:#993C1D">R</label>
-        <input type="number" id="ratioR" value="1" min="1" max="20" oninput="update()">
-        <label>rings → repeat</label>
-      </div>
+<!-- ===== TAB: FORECAST ===== -->
+<div id="tab-forecast">
+  <div class="card">
+    <p class="stitle">Forecast scenario</p>
+    <div class="sc-grid">
+      <button class="sc-btn on" data-sc="auto" onclick="setSc(this)">
+        <span class="sc-icon">⭐</span>
+        <span><span class="sc-label">Best auto</span><br><span class="sc-desc">สลับ L-R + ±30/±55 limit</span></span>
+      </button>
+      <button class="sc-btn" data-sc="prefL" onclick="setSc(this)">
+        <span class="sc-icon">🔵</span>
+        <span><span class="sc-label">เน้น L keys</span><br><span class="sc-desc">เลือก L ก่อนเสมอ</span></span>
+      </button>
+      <button class="sc-btn" data-sc="prefR" onclick="setSc(this)">
+        <span class="sc-icon">🔴</span>
+        <span><span class="sc-label">เน้น R keys</span><br><span class="sc-desc">เลือก R ก่อนเสมอ</span></span>
+      </button>
+      <button class="sc-btn" data-sc="altLR" onclick="setSc(this)">
+        <span class="sc-icon">🔄</span>
+        <span><span class="sc-label">สลับ L-R ทุก ring</span><br><span class="sc-desc">L→R→L→R (ไม่มี limit)</span></span>
+      </button>
+      <button class="sc-btn" data-sc="minH" onclick="setSc(this)">
+        <span class="sc-icon">↔️</span>
+        <span><span class="sc-label">เน้น H lead</span><br><span class="sc-desc">ลด H ก่อน ไม่สน V</span></span>
+      </button>
+      <button class="sc-btn" data-sc="minV" onclick="setSc(this)">
+        <span class="sc-icon">↕️</span>
+        <span><span class="sc-label">เน้น V plumb</span><br><span class="sc-desc">ลด V ก่อน ไม่สน H</span></span>
+      </button>
+      <button class="sc-btn sc-full" data-sc="ratio" onclick="setSc(this)">
+        <span class="sc-icon">⚖️</span>
+        <span><span class="sc-label">Custom L:R ratio</span><br><span class="sc-desc">กำหนดเองว่าจะใช้ L กี่ ring แล้วสลับ R กี่ ring</span></span>
+      </button>
     </div>
-    <div class="ratio-preview" id="ratioPreview"></div>
+    <div class="ratio-panel" id="ratioPanel">
+      <div class="ratio-row">
+        <div class="ratio-block"><label style="color:#185FA5">L</label><input type="number" id="ratioL" value="2" min="1" max="20" oninput="update()"><label>rings →</label></div>
+        <div class="ratio-block"><label style="color:#993C1D">R</label><input type="number" id="ratioR" value="1" min="1" max="20" oninput="update()"><label>rings → repeat</label></div>
+      </div>
+      <div class="ratio-preview" id="ratioPreview"></div>
+    </div>
+    <div class="logic-box" id="autoLogicBox">
+      <b>Best auto logic:</b><br>
+      1. สลับ L↔R + proj อยู่ใน <b>±30 mm</b> → เลือกก่อน<br>
+      2. สลับ L↔R + proj อยู่ใน <b>±55 mm</b><br>
+      3. ยอม same side + proj ใน <b>±30 mm</b><br>
+      4. ยอม same side + proj ใน <b>±55 mm</b><br>
+      5. Fallback → best จากทุก key &nbsp;|&nbsp; ⚠️ >±30 &nbsp; 🚨 >±55
+    </div>
   </div>
 
-  <div class="logic-box" id="autoLogicBox" style="display:block">
-    <b>Best auto logic:</b><br>
-    1. พยายามสลับ L↔R จาก ring ก่อนหน้า<br>
-    2. กรองเฉพาะ key ที่ proj H และ V อยู่ใน <b>±30 mm</b><br>
-    3. ถ้าไม่มี → ขยายเป็น <b>±55 mm</b><br>
-    4. ถ้ายังไม่มี (หรือสลับไม่ได้) → fallback เลือก best จากทุก key<br>
-    5. ⚠️ = proj เกิน ±30 &nbsp; 🚨 = proj เกิน ±55
+  <div class="card">
+    <p class="stitle" id="candTitle">Next ring candidates</p>
+    <div class="cand-grid" id="candGrid"></div>
+  </div>
+
+  <div class="card">
+    <p class="stitle" id="fcTitle">10-ring forecast</p>
+    <table>
+      <thead>
+        <tr><th class="l">Ring</th><th>Pref</th><th>Key used</th><th>Next key</th><th>Proj H</th><th>Proj V</th></tr>
+      </thead>
+      <tbody id="fcBody"></tbody>
+    </table>
+    <div class="chart-wrap"><canvas id="fcChart"></canvas></div>
   </div>
 </div>
 
-<div class="card">
-  <p class="stitle" id="candTitle">Next ring candidates</p>
-  <div class="cand-grid" id="candGrid"></div>
-</div>
+<!-- ===== TAB: CONVERGENCE ===== -->
+<div id="tab-convergence" style="display:none">
+  <div class="card">
+    <p class="stitle">Convergence finder</p>
+    <div style="margin-bottom:10px">
+      <button onclick="runConvergence()" style="padding:8px 20px;background:#185FA5;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer">▶ Find Convergence</button>
+    </div>
+    <div class="logic-box">
+      <b>เป้าหมาย:</b> หา ring แรกที่ proj H และ proj V ทั้งคู่อยู่ใน <b>±15 mm พร้อมกัน</b><br>
+      ใช้ Best auto logic (สลับ L-R + ±30/±55 limit) รันต่อเนื่องจาก current ring<br>
+      ถ้าไม่เจอใน 500 rings แสดงว่า alignment ปัจจุบันไม่สามารถ converge ได้
+    </div>
+  </div>
 
-<div class="card">
-  <p class="stitle" id="fcTitle">10-ring forecast</p>
-  <table>
-    <thead>
-      <tr>
-        <th class="l">Ring</th>
-        <th>Pref</th>
-        <th>Key used</th>
-        <th>Next key</th>
-        <th>Proj H</th>
-        <th>Proj V</th>
-      </tr>
-    </thead>
-    <tbody id="fcBody"></tbody>
-  </table>
-  <div class="chart-wrap"><canvas id="chart"></canvas></div>
+  <div id="convResult" style="display:none">
+    <div class="card">
+      <p class="stitle">Result</p>
+      <div class="conv-summary" id="convSummary"></div>
+      <p class="stitle" style="margin-bottom:8px">Key sequence to convergence</p>
+      <div class="conv-key-seq" id="convKeySeq"></div>
+    </div>
+    <div class="card">
+      <p class="stitle">Full trajectory</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr><th class="l">Ring</th><th>Key used</th><th>Next key</th><th>Proj H</th><th>Proj V</th></tr>
+          </thead>
+          <tbody id="convBody"></tbody>
+        </table>
+      </div>
+      <div class="chart-wrap" style="height:140px"><canvas id="convChart"></canvas></div>
+    </div>
+  </div>
 </div>
 
 <script>
-const W=1400;
+const W=1400, SOFT=30, HARD=55;
 const KEYS={L1:{h:55.43,v:22.96},L2:{h:42.43,v:42.43},L3:{h:22.96,v:55.43},L4:{h:0,v:60},L5:{h:-22.96,v:55.43},L6:{h:-42.43,v:42.43},L12:{h:0,v:-60},L13:{h:22.96,v:-55.43},L14:{h:42.43,v:-42.43},L15:{h:55.43,v:-22.96},L16:{h:60,v:0},R1:{h:-55.43,v:22.96},R2:{h:-60,v:0},R3:{h:-55.43,v:-22.96},R4:{h:-42.43,v:-42.43},R5:{h:-22.96,v:-55.43},R6:{h:0,v:-60},R12:{h:42.43,v:42.43},R13:{h:22.96,v:55.43},R14:{h:0,v:60},R15:{h:-22.96,v:55.43},R16:{h:-42.43,v:42.43}};
 const NEXT={L1:['L3','L15','R3','R15','L6','L12','R6','R12'],L2:['L4','L16','R4','R16','L13','R13'],L3:['L5','L14','L1','R5','R14','R1'],L4:['L15','L2','R15','R2','L6','L12','R6','R12'],L5:['L16','L3','R16','R3','L13','R13'],L6:['L1','L4','L14','R1','R4','R14'],L12:['L14','L1','L4','R14','R1','R4'],L13:['L15','L2','L5','R15','R2','R5'],L14:['L16','L3','R16','R3','L6','L12','R6','R12'],L15:['L1','L4','R1','R4','L13','R13'],L16:['L2','L5','L14','R2','R5','R14'],R1:['L3','L15','R3','R15','L6','L12','R6','R12'],R2:['L4','L16','R4','R16','L13','R13'],R3:['L5','L14','L1','R5','R14','R1'],R4:['L15','L2','R15','R2','L6','L12','R6','R12'],R5:['L16','L3','R16','R3','L13','R13'],R6:['L1','L4','L14','R1','R4','R14'],R12:['L14','L1','L4','R14','R1','R4'],R13:['L15','L2','L5','R15','R2','R5'],R14:['L16','L3','R16','R3','L6','L12','R6','R12'],R15:['L1','L4','R1','R4','L13','R13'],R16:['L2','L5','L14','R2','R5','R14']};
 
-const SOFT=30, HARD=55;
-
-let hDir='straight',vDir='straight',sc='auto',overrideKey=null,myChart=null;
-const ringOverride=Array(10).fill(null); // null=follow sc, 'auto'|'L'|'R'=manual
+let hDir='straight',vDir='straight',sc='auto',overrideKey=null,fcChart=null,convChart=null;
+const ringOverride=Array(10).fill(null);
 
 const keyEl=document.getElementById('currentKey');
 Object.keys(KEYS).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;if(k==='R4')o.selected=true;keyEl.appendChild(o);});
 
+function switchTab(t,btn){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('tab-forecast').style.display=t==='forecast'?'block':'none';
+  document.getElementById('tab-convergence').style.display=t==='convergence'?'block':'none';
+}
 function setSc(btn){
   document.querySelectorAll('.sc-btn').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on'); sc=btn.dataset.sc;
+  btn.classList.add('on');sc=btn.dataset.sc;
   document.getElementById('ratioPanel').classList.toggle('show',sc==='ratio');
   document.getElementById('autoLogicBox').style.display=sc==='auto'?'block':'none';
-  overrideKey=null; update();
+  overrideKey=null;update();
 }
 function setDir(btn,axis){
   const id=axis==='h'?'hDirTog':'vTypeTog';
@@ -238,7 +291,7 @@ function setDir(btn,axis){
   btn.classList.add('on');
   if(axis==='h'){hDir=btn.dataset.v;const d=hDir==='straight';document.getElementById('hRF').style.opacity=d?'.4':'1';document.getElementById('hR').disabled=d;}
   else{vDir=btn.dataset.v;const d=vDir==='straight';document.getElementById('vRF').style.opacity=d?'.4':'1';document.getElementById('vR').disabled=d;}
-  overrideKey=null; update();
+  overrideKey=null;update();
 }
 function setRingOverride(i,val){ringOverride[i]=val;if(i===0)overrideKey=null;update();}
 
@@ -248,56 +301,41 @@ function calcOff(R){return 6300*W/(R*1000);}
 function kb(k){return`<span class="kb ${k.startsWith('L')?'kbL':'kbR'}">${k}</span>`;}
 function inLimit(pH,pV,lim){return Math.abs(pH)<=lim&&Math.abs(pV)<=lim;}
 
-function ratioPattern(n){
-  const nL=Math.max(1,parseInt(document.getElementById('ratioL').value)||2);
-  const nR=Math.max(1,parseInt(document.getElementById('ratioR').value)||1);
-  const cyc=nL+nR,pat=[];
-  for(let i=0;i<n;i++)pat.push((i%cyc)<nL?'L':'R');
-  return pat;
+function getOffsets(){
+  const hRv=parseFloat(document.getElementById('hR').value)||1000;
+  const vRv=parseFloat(document.getElementById('vR').value)||3000;
+  const hMag=hDir==='straight'?0:calcOff(hRv);
+  const vMag=vDir==='straight'?0:calcOff(vRv);
+  return{
+    hOff:hDir==='right'?hMag:hDir==='left'?-hMag:0,
+    vOff:vDir==='sag'?vMag:vDir==='crest'?-vMag:0
+  };
 }
 
-// AUTO scenario: smart pick with altLR preference + limits
-function pickAuto(fromKey,hOff,vOff,cH,cV,prevKeyChar){
+function pickAuto(fromKey,hOff,vOff,cH,cV,prevChar){
   const cands=NEXT[fromKey]||[];
   if(!cands.length)return null;
   const scored=cands.map(k=>{
     const s=KEYS[k],pH=cH+hOff+s.h,pV=cV+vOff+s.v;
     return{key:k,projH:pH,projV:pV,isL:k.startsWith('L'),sa:Math.abs(pH)+Math.abs(pV)};
   });
-
-  // want to alternate from prevKeyChar ('L'|'R'|null)
-  const wantAlt = prevKeyChar==='L'?'R': prevKeyChar==='R'?'L':null;
-
+  const wantAlt=prevChar==='L'?'R':prevChar==='R'?'L':null;
   function best(pool){return pool.reduce((a,b)=>a.sa<=b.sa?a:b);}
-
-  // Step 1: try alternating + within soft limit
   if(wantAlt){
-    const p=scored.filter(x=>(x.isL===(wantAlt==='L'))&&inLimit(x.projH,x.projV,SOFT));
+    let p=scored.filter(x=>(x.isL===(wantAlt==='L'))&&inLimit(x.projH,x.projV,SOFT));
     if(p.length)return{...best(p),reason:'alt+soft'};
-  }
-  // Step 2: try alternating + within hard limit
-  if(wantAlt){
-    const p=scored.filter(x=>(x.isL===(wantAlt==='L'))&&inLimit(x.projH,x.projV,HARD));
+    p=scored.filter(x=>(x.isL===(wantAlt==='L'))&&inLimit(x.projH,x.projV,HARD));
     if(p.length)return{...best(p),reason:'alt+hard'};
   }
-  // Step 3: any key within soft limit (same side ok)
-  {
-    const p=scored.filter(x=>inLimit(x.projH,x.projV,SOFT));
-    if(p.length)return{...best(p),reason:'soft'};
-  }
-  // Step 4: any key within hard limit
-  {
-    const p=scored.filter(x=>inLimit(x.projH,x.projV,HARD));
-    if(p.length)return{...best(p),reason:'hard'};
-  }
-  // Step 5: fallback best of all
+  let p=scored.filter(x=>inLimit(x.projH,x.projV,SOFT));
+  if(p.length)return{...best(p),reason:'soft'};
+  p=scored.filter(x=>inLimit(x.projH,x.projV,HARD));
+  if(p.length)return{...best(p),reason:'hard'};
   return{...best(scored),reason:'fallback'};
 }
 
-function pickKey(fromKey,hOff,vOff,cH,cV,pref,scenario,prevKeyChar){
-  if(scenario==='auto'&&pref==='auto'||pref===null&&scenario==='auto'){
-    return pickAuto(fromKey,hOff,vOff,cH,cV,prevKeyChar);
-  }
+function pickKey(fromKey,hOff,vOff,cH,cV,pref,scenario,prevChar){
+  if((pref===null||pref==='auto')&&scenario==='auto')return pickAuto(fromKey,hOff,vOff,cH,cV,prevChar);
   const cands=NEXT[fromKey]||[];
   if(!cands.length)return null;
   const scored=cands.map(k=>{
@@ -307,31 +345,31 @@ function pickKey(fromKey,hOff,vOff,cH,cV,pref,scenario,prevKeyChar){
   let pool=scored;
   if(pref==='L'||(pref===null&&scenario==='prefL')){const p=scored.filter(x=>x.isL);pool=p.length?p:scored;}
   else if(pref==='R'||(pref===null&&scenario==='prefR')){const p=scored.filter(x=>!x.isL);pool=p.length?p:scored;}
-  else if(pref===null&&scenario==='altLR'){
-    const wL=prevKeyChar==='R'||prevKeyChar===null;
-    const p=scored.filter(x=>x.isL===wL);pool=p.length?p:scored;
-  } else if(pref===null&&scenario==='ratio'){
-    // handled by caller passing pref
-  }
-  if(scenario==='minH'&&pref===null)return pool.reduce((a,b)=>a.sh<=b.sh?a:b);
-  if(scenario==='minV'&&pref===null)return pool.reduce((a,b)=>a.sv<=b.sv?a:b);
+  else if(pref===null&&scenario==='altLR'){const wL=prevChar==='R'||!prevChar;const p=scored.filter(x=>x.isL===wL);pool=p.length?p:scored;}
+  if(scenario==='minH'&&!pref)return pool.reduce((a,b)=>a.sh<=b.sh?a:b);
+  if(scenario==='minV'&&!pref)return pool.reduce((a,b)=>a.sv<=b.sv?a:b);
   return pool.reduce((a,b)=>a.sa<=b.sa?a:b);
 }
 
+function ratioPattern(n){
+  const nL=Math.max(1,parseInt(document.getElementById('ratioL').value)||2);
+  const nR=Math.max(1,parseInt(document.getElementById('ratioR').value)||1);
+  const cyc=nL+nR,pat=[];
+  for(let i=0;i<n;i++)pat.push((i%cyc)<nL?'L':'R');
+  return pat;
+}
 function effectivePref(i,ratioPat){
   if(ringOverride[i]!==null)return ringOverride[i];
   if(sc==='ratio')return ratioPat[i]==='L'?'L':'R';
   return null;
 }
-
 function scLabel(){
   const m={auto:'Best auto ⭐',prefL:'เน้น L',prefR:'เน้น R',altLR:'สลับ L-R',minH:'เน้น H',minV:'เน้น V'};
   if(sc==='ratio'){const nL=parseInt(document.getElementById('ratioL').value)||2;const nR=parseInt(document.getElementById('ratioR').value)||1;return`L×${nL}:R×${nR}`;}
   return m[sc]||sc;
 }
-
 function makePrefToggle(i){
-  const v=ringOverride[i]; // null=sc, 'auto', 'L', 'R'
+  const v=ringOverride[i];
   return`<div class="rtog">
     <button class="${v===null?'on-sc':''}" onclick="setRingOverride(${i},null)">Sc</button>
     <button class="${v==='auto'?'on-auto':''}" onclick="setRingOverride(${i},'auto')">Auto</button>
@@ -339,11 +377,10 @@ function makePrefToggle(i){
     <button class="${v==='R'?'on-R':''}" onclick="setRingOverride(${i},'R')">R</button>
   </div>`;
 }
-
-function limitTag(pH,pV){
-  const a=Math.max(Math.abs(pH),Math.abs(pV));
-  if(a>HARD)return`<span class="vtag vtag-danger">🚨 >${HARD}</span>`;
-  if(a>SOFT)return`<span class="vtag vtag-warn">⚠️ >${SOFT}</span>`;
+function limitTagVal(v){
+  const a=Math.abs(v);
+  if(a>HARD)return`<span class="vtag vtag-danger">🚨</span>`;
+  if(a>SOFT)return`<span class="vtag vtag-warn">⚠️</span>`;
   return'';
 }
 
@@ -351,13 +388,9 @@ function update(){
   const hLead=parseFloat(document.getElementById('hLead').value)||0;
   const vPlumb=parseFloat(document.getElementById('vPlumb').value)||0;
   const curKey=document.getElementById('currentKey').value;
+  const {hOff,vOff}=getOffsets();
   const hRv=parseFloat(document.getElementById('hR').value)||1000;
   const vRv=parseFloat(document.getElementById('vR').value)||3000;
-
-  const hMag=hDir==='straight'?0:calcOff(hRv);
-  const vMag=vDir==='straight'?0:calcOff(vRv);
-  const hOff=hDir==='right'?hMag:hDir==='left'?-hMag:0;
-  const vOff=vDir==='sag'?vMag:vDir==='crest'?-vMag:0;
 
   document.getElementById('hChip').innerHTML=hDir==='straight'
     ?'<span class="chip" style="background:#f0f0f0;color:#666">No H curve offset</span>'
@@ -367,37 +400,27 @@ function update(){
     :`<span class="chip" style="${vDir==='sag'?'background:#eaf5ee;color:#0F6E56':'background:#ffeeee;color:#993C1D'}">${vDir==='sag'?'Sag ↑':'Crest ↓'} Rv=${vRv}m → ${fmt(vOff)} mm/ring</span>`;
 
   let ratioPat=[];
-  if(sc==='ratio'){
-    ratioPat=ratioPattern(10);
-    document.getElementById('ratioPreview').innerHTML=ratioPat.map((t,i)=>`<span class="rp-chip rp-${t}">${t}${i+1}</span>`).join('');
-  }
-
+  if(sc==='ratio'){ratioPat=ratioPattern(10);document.getElementById('ratioPreview').innerHTML=ratioPat.map((t,i)=>`<span class="rp-chip rp-${t}">${t}${i+1}</span>`).join('');}
+  document.getElementById('autoLogicBox').style.display=sc==='auto'?'block':'none';
   document.getElementById('fcTitle').textContent=`10-ring forecast — ${scLabel()}`;
 
-  // candidates for ring+1 (using auto logic from curKey)
   const cands=NEXT[curKey]||[];
   const prevChar=curKey.startsWith('L')?'L':'R';
   const pref0=effectivePref(0,ratioPat);
-  const scRes=pref0!==null
-    ?pickKey(curKey,hOff,vOff,hLead,vPlumb,pref0,sc,prevChar)
-    :pickKey(curKey,hOff,vOff,hLead,vPlumb,null,sc,prevChar);
+  const scRes=pickKey(curKey,hOff,vOff,hLead,vPlumb,pref0,sc,prevChar);
   const scKey=scRes?scRes.key:null;
   if(overrideKey&&!cands.includes(overrideKey))overrideKey=null;
   const chosen=overrideKey||scKey;
 
   document.getElementById('candTitle').textContent=`Ring +1 candidates — ${chosen||'—'} ${overrideKey?'(manual)':'('+scLabel()+')'}`;
-
   const grid=document.getElementById('candGrid');
   grid.innerHTML='';
   cands.forEach(k=>{
     const seg=KEYS[k],pH=hLead+hOff+seg.h,pV=vPlumb+vOff+seg.v;
     const isPick=k===scKey,isChosen=k===chosen;
-    const overLimit=Math.max(Math.abs(pH),Math.abs(pV))>HARD;
-    const warnLimit=!overLimit&&Math.max(Math.abs(pH),Math.abs(pV))>SOFT;
-    let cls='cand-btn';
-    if(isChosen)cls+=isPick?' sc-pick':' manual';
-    else if(overLimit)cls+=' danger';
-    else if(warnLimit)cls+=' warn';
+    const over=Math.max(Math.abs(pH),Math.abs(pV))>HARD;
+    const warn=!over&&Math.max(Math.abs(pH),Math.abs(pV))>SOFT;
+    let cls='cand-btn'+(isChosen?(isPick?' sc-pick':' manual'):over?' danger':warn?' warn':'');
     const btn=document.createElement('button');
     btn.className=cls;
     btn.innerHTML=`<span class="cand-key ${k.startsWith('L')?'kL':'kR'}">${k}${isPick?'<span class="star">★</span>':''}</span><span class="cand-vals">H: ${fmt(pH)}<br>V: ${fmt(pV)}</span>`;
@@ -405,24 +428,15 @@ function update(){
     grid.appendChild(btn);
   });
 
-  // forecast
   const rows=[];
-  let cH=hLead,cV=vPlumb,key=curKey,prevChar2=prevChar;
+  let cH=hLead,cV=vPlumb,key=curKey,pc=prevChar;
   for(let i=0;i<10;i++){
     let res;
-    if(i===0&&chosen){
-      const s=KEYS[chosen];
-      res={key:chosen,projH:cH+hOff+s.h,projV:cV+vOff+s.v,reason:overrideKey?'manual':scRes?.reason};
-    } else {
-      const pref=effectivePref(i,ratioPat);
-      res=pref!==null
-        ?pickKey(key,hOff,vOff,cH,cV,pref,sc,prevChar2)
-        :pickKey(key,hOff,vOff,cH,cV,null,sc,prevChar2);
-    }
+    if(i===0&&chosen){const s=KEYS[chosen];res={key:chosen,projH:cH+hOff+s.h,projV:cV+vOff+s.v,reason:overrideKey?'manual':scRes?.reason};}
+    else{const pref=effectivePref(i,ratioPat);res=pickKey(key,hOff,vOff,cH,cV,pref,sc,pc);}
     if(!res)break;
-    rows.push({ring:i,usedKey:key,nextKey:res.key,projH:res.projH,projV:res.projV,reason:res.reason});
-    prevChar2=res.key.startsWith('L')?'L':'R';
-    key=res.key;cH=res.projH;cV=res.projV;
+    rows.push({ring:i,usedKey:key,nextKey:res.key,projH:res.projH,projV:res.projV});
+    pc=res.key.startsWith('L')?'L':'R';key=res.key;cH=res.projH;cV=res.projV;
   }
 
   const tbody=document.getElementById('fcBody');
@@ -430,40 +444,111 @@ function update(){
   rows.forEach((r,i)=>{
     const tr=document.createElement('tr');
     if(i===0)tr.className='hi';
-    const tag=limitTag(r.projH,r.projV);
-    const sameTag=(i>0&&rows[i-1]&&rows[i-1].nextKey.charAt(0)===r.nextKey.charAt(0)&&sc==='auto'&&ringOverride[i]===null)
-      ?`<span class="vtag vtag-same">same</span>`:'';
-    tr.innerHTML=`
-      <td class="l">+${r.ring+1}</td>
-      <td>${makePrefToggle(i)}</td>
-      <td>${kb(r.usedKey)}</td>
-      <td>${kb(r.nextKey)}${sameTag}</td>
-      <td class="${dc(r.projH)}">${fmt(r.projH)}${tag}</td>
-      <td class="${dc(r.projV)}">${fmt(r.projV)}</td>
-    `;
+    const tagH=limitTagVal(r.projH), tagV=limitTagVal(r.projV);
+    const sameTag=(i>0&&rows[i-1]&&rows[i-1].nextKey[0]===r.nextKey[0]&&sc==='auto'&&ringOverride[i]===null)?`<span class="vtag vtag-same">same</span>`:'';
+    tr.innerHTML=`<td class="l">+${r.ring+1}</td><td>${makePrefToggle(i)}</td><td>${kb(r.usedKey)}</td><td>${kb(r.nextKey)}${sameTag}</td><td class="${dc(r.projH)}">${fmt(r.projH)}${tagH}</td><td class="${dc(r.projV)}">${fmt(r.projV)}${tagV}</td>`;
     tbody.appendChild(tr);
   });
 
-  if(myChart)myChart.destroy();
-  myChart=new Chart(document.getElementById('chart'),{
+  if(fcChart)fcChart.destroy();
+  fcChart=new Chart(document.getElementById('fcChart'),{
     type:'line',
-    data:{
-      labels:rows.map(r=>'+' +(r.ring+1)),
-      datasets:[
-        {label:'Proj H',data:rows.map(r=>+r.projH.toFixed(2)),borderColor:'#185FA5',borderWidth:2,pointRadius:3,tension:0.3,fill:false},
-        {label:'Proj V',data:rows.map(r=>+r.projV.toFixed(2)),borderColor:'#0F6E56',borderWidth:2,pointRadius:3,tension:0.3,fill:false},
-        {label:'+30',data:Array(rows.length).fill(30),borderColor:'#e8b84b',borderWidth:1,borderDash:[4,3],pointRadius:0,fill:false},
-        {label:'-30',data:Array(rows.length).fill(-30),borderColor:'#e8b84b',borderWidth:1,borderDash:[4,3],pointRadius:0,fill:false},
-        {label:'+55',data:Array(rows.length).fill(55),borderColor:'#cc3333',borderWidth:1,borderDash:[2,3],pointRadius:0,fill:false},
-        {label:'-55',data:Array(rows.length).fill(-55),borderColor:'#cc3333',borderWidth:1,borderDash:[2,3],pointRadius:0,fill:false},
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{filter:i=>!['\\+30','-30','\\+55','-55','+30','-30','+55','-55'].includes(i.text)?true:false,font:{size:10},boxWidth:12}}},
-      scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:10}},title:{display:true,text:'mm',font:{size:10}}}}
-    }
+    data:{labels:rows.map(r=>'+' +(r.ring+1)),datasets:[
+      {label:'H',data:rows.map(r=>+r.projH.toFixed(2)),borderColor:'#185FA5',borderWidth:2,pointRadius:3,tension:0.3,fill:false},
+      {label:'V',data:rows.map(r=>+r.projV.toFixed(2)),borderColor:'#0F6E56',borderWidth:2,pointRadius:3,tension:0.3,fill:false},
+      {label:'+30',data:Array(rows.length).fill(30),borderColor:'#e8b84b',borderWidth:1,borderDash:[4,3],pointRadius:0,fill:false},
+      {label:'-30',data:Array(rows.length).fill(-30),borderColor:'#e8b84b',borderWidth:1,borderDash:[4,3],pointRadius:0,fill:false},
+      {label:'+55',data:Array(rows.length).fill(55),borderColor:'#cc3333',borderWidth:1,borderDash:[2,3],pointRadius:0,fill:false},
+      {label:'-55',data:Array(rows.length).fill(-55),borderColor:'#cc3333',borderWidth:1,borderDash:[2,3],pointRadius:0,fill:false},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{filter:i=>['H','V'].includes(i.text),font:{size:10},boxWidth:12}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:10}},title:{display:true,text:'mm',font:{size:10}}}}}
   });
+}
+
+// ===== CONVERGENCE =====
+function runConvergence(){
+  const hLead=parseFloat(document.getElementById('hLead').value)||0;
+  const vPlumb=parseFloat(document.getElementById('vPlumb').value)||0;
+  const curKey=document.getElementById('currentKey').value;
+  const {hOff,vOff}=getOffsets();
+  const TARGET=15, MAX=500;
+
+  const rows=[];
+  let cH=hLead,cV=vPlumb,key=curKey;
+  let pc=curKey.startsWith('L')?'L':'R';
+  let convergedIdx=-1;
+
+  for(let i=0;i<MAX;i++){
+    const res=pickAuto(key,hOff,vOff,cH,cV,pc);
+    if(!res)break;
+    rows.push({ring:i,usedKey:key,nextKey:res.key,projH:res.projH,projV:res.projV});
+    if(Math.abs(res.projH)<=TARGET&&Math.abs(res.projV)<=TARGET){convergedIdx=i;break;}
+    pc=res.key.startsWith('L')?'L':'R';
+    key=res.key;cH=res.projH;cV=res.projV;
+  }
+
+  const found=convergedIdx>=0;
+  const best=found?rows[convergedIdx]:null;
+
+  // summary
+  document.getElementById('convSummary').innerHTML=found?`
+    <div class="conv-metric"><div class="lb">Converged at ring</div><div class="vl good">+${convergedIdx+1}</div></div>
+    <div class="conv-metric"><div class="lb">Proj H at convergence</div><div class="vl good">${fmt(best.projH)} mm</div></div>
+    <div class="conv-metric"><div class="lb">Proj V at convergence</div><div class="vl good">${fmt(best.projV)} mm</div></div>
+  `:`
+    <div class="conv-metric" style="grid-column:span 3">
+      <div class="lb">ผลการคำนวณ</div>
+      <div class="vl" style="font-size:14px;color:#A32D2D">ไม่สามารถ converge ได้ใน ${MAX} rings ภายใต้ alignment ปัจจุบัน</div>
+    </div>
+  `;
+
+  // key sequence — show all rings up to converge point
+  const showTo=found?convergedIdx:Math.min(rows.length-1,19);
+  const seqEl=document.getElementById('convKeySeq');
+  seqEl.innerHTML='';
+  for(let i=0;i<=showTo;i++){
+    const r=rows[i];
+    const isBest=i===convergedIdx;
+    const div=document.createElement('div');
+    div.className='conv-ring'+(isBest?' is-best':'');
+    div.innerHTML=`<span class="rn">+${i+1}</span><span class="rk ${r.nextKey.startsWith('L')?'kbL':'kbR'}">${r.nextKey}</span>`;
+    seqEl.appendChild(div);
+  }
+  if(!found&&rows.length>20){
+    const more=document.createElement('div');
+    more.className='conv-ring';
+    more.innerHTML=`<span class="rn">&nbsp;</span><span style="font-size:18px;color:#ccc;line-height:24px">…</span>`;
+    seqEl.appendChild(more);
+  }
+
+  // full table
+  const tbody=document.getElementById('convBody');
+  tbody.innerHTML='';
+  rows.forEach((r,i)=>{
+    const tr=document.createElement('tr');
+    if(i===convergedIdx)tr.className='best-ring';
+    const convTag=i===convergedIdx?`<span class="vtag vtag-best">✓ ±15</span>`:'';
+    tr.innerHTML=`<td class="l">+${r.ring+1}</td><td>${kb(r.usedKey)}</td><td>${kb(r.nextKey)}${convTag}</td><td class="${dc(r.projH)}">${fmt(r.projH)}</td><td class="${dc(r.projV)}">${fmt(r.projV)}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  // chart
+  if(convChart)convChart.destroy();
+  const n=rows.length;
+  convChart=new Chart(document.getElementById('convChart'),{
+    type:'line',
+    data:{labels:rows.map(r=>'+' +(r.ring+1)),datasets:[
+      {label:'H',data:rows.map(r=>+r.projH.toFixed(2)),borderColor:'#185FA5',borderWidth:1.5,pointRadius:rows.length>50?0:2,tension:0.3,fill:false},
+      {label:'V',data:rows.map(r=>+r.projV.toFixed(2)),borderColor:'#0F6E56',borderWidth:1.5,pointRadius:rows.length>50?0:2,tension:0.3,fill:false},
+      {label:'+15',data:Array(n).fill(15),borderColor:'#0F6E56',borderWidth:1,borderDash:[4,3],pointRadius:0,fill:false},
+      {label:'-15',data:Array(n).fill(-15),borderColor:'#0F6E56',borderWidth:1,borderDash:[4,3],pointRadius:0,fill:false},
+      {label:'+30',data:Array(n).fill(30),borderColor:'#e8b84b',borderWidth:1,borderDash:[3,4],pointRadius:0,fill:false},
+      {label:'-30',data:Array(n).fill(-30),borderColor:'#e8b84b',borderWidth:1,borderDash:[3,4],pointRadius:0,fill:false},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{filter:i=>['H','V'].includes(i.text),font:{size:10},boxWidth:12}}},scales:{x:{ticks:{font:{size:10},maxTicksLimit:15}},y:{ticks:{font:{size:10}},title:{display:true,text:'mm',font:{size:10}}}}}
+  });
+
+  document.getElementById('convResult').style.display='block';
 }
 
 ['hLead','vPlumb','hR','vR','currentKey'].forEach(id=>{
